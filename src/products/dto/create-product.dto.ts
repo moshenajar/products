@@ -17,9 +17,9 @@ export class CreateProductDto {
   @ApiProperty()
   @IsString()
   ProductDescription: string;
-  @ApiProperty()
+ /* @ApiProperty()
   @IsDate()
-  LocalDateTime: Date;
+  LocalDateTime: Date;*/
   @ApiProperty()
   @IsString()
   deliveryTimeSpan:string;

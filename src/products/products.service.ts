@@ -1,11 +1,13 @@
-import { Model } from 'mongoose';
+import { Date, Model } from 'mongoose';
 import { Inject, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Product } from './schemas/product.schema';
+import { Product, ProductItem } from './schemas/product.schema';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { ClientProxy } from '@nestjs/microservices';
 import { InventoryDto } from './dto/inventory.dto';
+import * as moment from 'moment';
+import { log } from 'console';
 
 const CREATE_INVENTORY_OF_PRODUCT  = 'CreateInventoryOfProduct';
 
@@ -17,12 +19,17 @@ export class ProductsService {
       @Inject("INVENTORY_SERVICE") private rabbitClient: ClientProxy) {}
 
     async create(createProductDto: CreateProductDto): Promise<Product> {
-        let product:Product = createProductDto;
-        const createdProduct = new this.productModel(Product);
+        const LocalDateTime = new Date();
+        const productID = 12345678
+        const ban = 12345678
+        const product : ProductItem = { productID,LocalDateTime,...createProductDto }
+        let status:number = 1;
+        const productCreator: Product = { ban,status,product };
+        const createdProduct = new this.productModel(productCreator);
         return createdProduct.save();
       }
     
-    async findAll(): Promise<Product[]> {
+    /*async findAll(): Promise<Product[]> {
         return this.productModel.find().exec();
       }
 
@@ -36,7 +43,7 @@ export class ProductsService {
     
     deleteProduct(id: string) {
         return this.productModel.findByIdAndDelete(id).exec();
-    }
+    }*/
 
     productInventory(inventoryDto: InventoryDto){
       this.rabbitClient.emit(CREATE_INVENTORY_OF_PRODUCT, inventoryDto);

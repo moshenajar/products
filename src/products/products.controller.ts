@@ -4,7 +4,7 @@ import { ProductsService } from './products.service';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { LoggingInterceptor } from 'src/common/interceptor/logging.interceptor';
 import { CreateProductDto } from './dto/create-product.dto';
-import { Product } from './schemas/product.schema';
+//import { Product } from './schemas/product.schema';
 import mongoose from 'mongoose';
 import { InventoryDto } from './dto/inventory.dto';
 
@@ -13,7 +13,7 @@ import { InventoryDto } from './dto/inventory.dto';
 export class ProductsController {
     constructor(private readonly productsService: ProductsService) {}
 
-    @Get()
+   /* @Get()
     async findAll():Promise<Product[]> {
         return  this.productsService.findAll();
     }
@@ -25,7 +25,7 @@ export class ProductsController {
         const findProduct = await this.productsService.findOne(id);
         if (!findProduct) throw new HttpException('Product not found', 404);
         return findProduct;
-    }
+    }*/
 
 
     @Post()
@@ -36,7 +36,7 @@ export class ProductsController {
         this.productsService.create(createProductDto);
     }
 
-    @Delete(':id')
+   /* @Delete(':id')
     async deleteProduct(@Param('id') id: string) {
         const isValid = mongoose.Types.ObjectId.isValid(id);
         if (!isValid) throw new HttpException('Invalid ID', 400);
@@ -56,11 +56,10 @@ export class ProductsController {
         const updateProduct = await this.productsService.updateProduct(id, updateProductDto);
         if (!updateProduct) throw new HttpException('Product Not Found', 404);
         return updateProduct;
-    }
+    }*/
 
     @Post('product-inventory')
     productInventory(@Body() inventoryDto: InventoryDto){
         return this.productsService.productInventory(inventoryDto);
     }
-
 }
