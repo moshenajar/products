@@ -1,14 +1,17 @@
 
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+//const mongoose = require('mongoose');
+//const AutoIncrement = require('mongoose-sequence')(mongoose);
+
 import { HydratedDocument } from 'mongoose';
+export type ProductDocument = HydratedDocument<Product>;
 
-export type ProductDocument = HydratedDocument<ProductItem>;
 
 
-@Schema()
+
+@Schema({ _id: false })
 export class ProductItem {
-    @Prop()
-    productID:number;
+    //productID:number;
     @Prop()
     productSku: string;
     @Prop()
@@ -31,7 +34,6 @@ export class ProductItem {
     productImageUrl: string;
 }
 
-export const ProductItemSchema = SchemaFactory.createForClass(ProductItem);
 
 
 @Schema()
@@ -40,8 +42,12 @@ export class Product {
     ban: number;
     @Prop()
     status: number;
-    @Prop({ type: ProductItemSchema} )
+    @Prop()
     product:ProductItem;
 }
 
+
 export const ProductSchema = SchemaFactory.createForClass(Product);
+/*ProductSchema.plugin(AutoIncrement, {  
+    id: 'product_create_seq',
+    inc_field: 'product.productID'});*/

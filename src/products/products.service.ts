@@ -22,7 +22,8 @@ export class ProductsService {
         const LocalDateTime = new Date();
         const productID = 12345678
         const ban = 12345678
-        const product : ProductItem = { productID,LocalDateTime,...createProductDto }
+        //const product : ProductItem = { productID,LocalDateTime,...createProductDto }
+        const product : ProductItem = { LocalDateTime,...createProductDto }
         let status:number = 1;
         const productCreator: Product = { ban,status,product };
         const createdProduct = new this.productModel(productCreator);
