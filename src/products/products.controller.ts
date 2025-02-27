@@ -50,8 +50,8 @@ export class ProductsController {
         @Param('productID') productID: number, 
         @Body() updateProductDto: UpdateProductDto
     ) {
-        //const isValid = mongoose.Types.ObjectId.isValid(id);
-        //if (!isValid) throw new HttpException('Invalid ID', 400);
+        const isValid = this.productsService.isNumber(productID);
+        if (!isValid) throw new HttpException('Invalid ID', 400);
         const updateProduct = await this.productsService.updateProduct(productID, updateProductDto);
         if (!updateProduct) throw new HttpException('Product Not Found', 404);
         return updateProduct;
