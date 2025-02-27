@@ -9,18 +9,6 @@ import { Connection } from 'mongoose';
 
 @Module({
   imports: [
-    //MongooseModule.forRoot('mongodb://localhost:28017/products'),
-    //MongooseModule.forFeature([{ name: Product.name, schema: ProductSchema }]),
-    /*MongooseModule.forFeatureAsync([
-      {
-        name: Product.name,
-        useFactory: () => {
-          const schema = ProductSchema;
-          schema.plugin(require('mongoose-sequence'));
-          return schema;
-        },
-      },
-    ]),*/
     MongooseModule.forFeatureAsync([
         {
           name: Product.name,
