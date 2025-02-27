@@ -7,25 +7,26 @@ import { CreateProductDto } from './dto/create-product.dto';
 //import { Product } from './schemas/product.schema';
 import mongoose from 'mongoose';
 import { InventoryDto } from './dto/inventory.dto';
+import { Product } from './schemas/product.schema';
 
 @Controller('products')
 @UseInterceptors(LoggingInterceptor)
 export class ProductsController {
     constructor(private readonly productsService: ProductsService) {}
 
-   /* @Get()
+    @Get()
     async findAll():Promise<Product[]> {
         return  this.productsService.findAll();
     }
 
-    @Get(':id')
-    async findOne(@Param('id') id: string) {
-        const isValid = mongoose.Types.ObjectId.isValid(id);
-        if (!isValid) throw new HttpException('Product not found', 404);
-        const findProduct = await this.productsService.findOne(id);
+    @Get(':productID')
+    async findOne(@Param('productID') productID: number) {
+        //const isValid = mongoose.Types.ObjectId.isValid(productID);
+        //if (!isValid) throw new HttpException('Product not found', 404);
+        const findProduct = await this.productsService.findOne(productID);
         if (!findProduct) throw new HttpException('Product not found', 404);
         return findProduct;
-    }*/
+    }
 
 
     @Post()
@@ -36,27 +37,28 @@ export class ProductsController {
         this.productsService.create(createProductDto);
     }
 
-   /* @Delete(':id')
-    async deleteProduct(@Param('id') id: string) {
-        const isValid = mongoose.Types.ObjectId.isValid(id);
-        if (!isValid) throw new HttpException('Invalid ID', 400);
-        const deleteProduct = await this.productsService.deleteProduct(id);
+    @Delete(':productID')
+    async deleteProduct(@Param('productID') productID: number) {
+        //const isValid = mongoose.Types.ObjectId.isValid(id);
+        //if (!isValid) throw new HttpException('Invalid ID', 400);
+        const deleteProduct = await this.productsService.deleteProduct(productID);
         if (!deleteProduct) throw new HttpException('Product Not Found', 404);
         return;
     }
 
-    @Patch(':id')
+    @Patch(':productID')
     //@ProductPipes(new ValidationPipe())
     async updateProduct(
-        @Param('id') id: string, 
+        @Param('productID') productID: number, 
         @Body() updateProductDto: UpdateProductDto
     ) {
-        const isValid = mongoose.Types.ObjectId.isValid(id);
-        if (!isValid) throw new HttpException('Invalid ID', 400);
-        const updateProduct = await this.productsService.updateProduct(id, updateProductDto);
+        //const isValid = mongoose.Types.ObjectId.isValid(id);
+        //if (!isValid) throw new HttpException('Invalid ID', 400);
+        //(await this.findOne(productID)).
+        const updateProduct = await this.productsService.updateProduct(productID, updateProductDto);
         if (!updateProduct) throw new HttpException('Product Not Found', 404);
         return updateProduct;
-    }*/
+    }
 
     @Post('product-inventory')
     productInventory(@Body() inventoryDto: InventoryDto){

@@ -3,7 +3,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 //const mongoose = require('mongoose');
 //const AutoIncrement = require('mongoose-sequence')(mongoose);
 
-import { HydratedDocument } from 'mongoose';
+import { HydratedDocument, SchemaTypes, Types } from 'mongoose';
 export type ProductDocument = HydratedDocument<Product>;
 
 
@@ -11,7 +11,8 @@ export type ProductDocument = HydratedDocument<Product>;
 
 @Schema({ _id: false })
 export class ProductItem {
-    //productID:number;
+    @Prop()
+    productID?:number;
     @Prop()
     productSku: string;
     @Prop()
@@ -38,6 +39,8 @@ export class ProductItem {
 
 @Schema()
 export class Product {
+    @Prop({ type: SchemaTypes.ObjectId })
+    id?: Types.ObjectId
     @Prop()
     ban: number;
     @Prop()
