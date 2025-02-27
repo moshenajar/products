@@ -1,5 +1,6 @@
-import { IsString, IsInt, IsDate } from 'class-validator';
+import { IsString, IsInt, IsDate, IsBoolean } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
+import { InventoryDto } from './inventory.dto';
 
 export class CreateProductDto {
   @ApiProperty()
@@ -17,9 +18,6 @@ export class CreateProductDto {
   @ApiProperty()
   @IsString()
   ProductDescription: string;
- /* @ApiProperty()
-  @IsDate()
-  LocalDateTime: Date;*/
   @ApiProperty()
   @IsString()
   deliveryTimeSpan:string;
@@ -32,4 +30,9 @@ export class CreateProductDto {
   @ApiProperty()
   @IsString()
   productImageUrl: string;
+  @ApiProperty()
+  @IsBoolean()
+  isInventoryManagementRequired:boolean;
+  @ApiProperty()
+  inventoryData?:InventoryDto
 }

@@ -47,6 +47,8 @@ export class Product {
     status: number;
     @Prop()
     product:ProductItem;
+    @Prop()
+    isInventoryManagementRequired:boolean;
 }
 
 
