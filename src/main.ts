@@ -1,9 +1,15 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerDocumentOptions, SwaggerModule } from '@nestjs/swagger';
+import { ConfigService } from '@nestjs/config';
+import { Logger } from '@nestjs/common';
 
 async function bootstrap() {
+  const logger = new Logger('main');
   const app = await NestFactory.create(AppModule);
+  const configService = app.get(ConfigService);
+  
+
   app.enableCors();
 
   const config = new DocumentBuilder()
@@ -22,6 +28,10 @@ async function bootstrap() {
   const documentFactory = () => SwaggerModule.createDocument(app, config, options);
   SwaggerModule.setup('api', app, documentFactory);
   
-  await app.listen(3000);
+  const port = configService.get<number>('port', 3000);
+  await app.listen(port);
+  logger.log(
+    `app ready to listen  in PORT - ${port}\n`,
+  );
 }
 bootstrap();

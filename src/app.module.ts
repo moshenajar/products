@@ -2,12 +2,27 @@ import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ProductsModule } from './products/products.module';
 import { LoggerMiddleware } from './common/middleware/logger.middleware';
 import { ProductsController } from './products/products.controller';
-import { MongooseModule } from '@nestjs/mongoose';
+import { MongooseModule, MongooseModuleOptions } from '@nestjs/mongoose';
 import { CategoriesModule } from './categories/categories.module';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import configuration from './config/configuration';
 
 @Module({
   imports: [
-    MongooseModule.forRoot('mongodb://localhost:28017/products'),
+    ConfigModule.forRoot({
+      isGlobal: true,
+      load: [configuration]
+    }),
+    MongooseModule.forRootAsync({
+      //imports: [ConfigService],
+      useFactory: (configService: ConfigService) => {
+        const options: MongooseModuleOptions = {
+          uri : configService.get('database.url'),
+        };
+        return options;
+      },
+      inject: [ConfigService],
+    }),
     ProductsModule,
     CategoriesModule,
     ],
