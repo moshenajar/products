@@ -2,9 +2,11 @@ import { Module } from '@nestjs/common';
 import { MongooseModule, getConnectionToken  } from '@nestjs/mongoose';
 import { ProductsController } from './products.controller';
 import { ProductsService } from './products.service';
+import { AuthService } from '../guards/auth.service';
 import { Product, ProductSchema } from './schemas/product.schema';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { Connection } from 'mongoose';
+import { HttpModule } from '../http.module';
 
 
 @Module({
@@ -34,9 +36,16 @@ import { Connection } from 'mongoose';
           queue: 'inventory-queue',
         }
       },
-    ])
+    ]),
+    HttpModule.forFeature({
+      serviceName: 'CustomHttpService',
+      config: {
+        baseURL: 'http://localhost:3012',
+        enableLogging: true,
+      },
+    }),
   ],
   controllers: [ProductsController],
-  providers: [ProductsService],
+  providers: [ProductsService, AuthService],
 })
 export class ProductsModule {}

@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpException, HttpStatus, Param, Patch, Post, Put, Req, UseInterceptors, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, HttpException, HttpStatus, Param, Patch, Post, Put, Req, UseGuards, UseInterceptors, UsePipes, ValidationPipe } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { ProductsService } from './products.service';
 import { UpdateProductDto } from './dto/update-product.dto';
@@ -8,6 +8,9 @@ import { InventoryDto } from './dto/inventory.dto';
 import { Product } from './schemas/product.schema';
 import mongoose from 'mongoose';
 import { IsNumber } from 'class-validator';
+import { AuthGuard } from 'src/guards/auth.guard';
+import { User } from 'src/guards/user.entity';
+import { GetUser } from 'src/guards/get-user.decorator';
 
 @Controller('products')
 @UseInterceptors(LoggingInterceptor)
@@ -29,8 +32,9 @@ export class ProductsController {
 
     @Post()
     @HttpCode(HttpStatus.CREATED)
+    @UseGuards(AuthGuard)
     @UsePipes(new ValidationPipe)
-    async create(@Body() createProductDto: CreateProductDto): Promise<number> {
+    async create(@Body() createProductDto: CreateProductDto,@GetUser() user: User): Promise<number> {
         const product = await this.productsService.create(createProductDto);
         return product.product.productID;
     }

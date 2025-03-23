@@ -1,5 +1,5 @@
 import mongoose, { Date, Model } from 'mongoose';
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, Scope } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Product, ProductItem } from './schemas/product.schema';
 import { CreateProductDto } from './dto/create-product.dto';
@@ -8,17 +8,21 @@ import { ClientProxy, NestMicroservice } from '@nestjs/microservices';
 import { InventoryDto } from './dto/inventory.dto';
 import * as moment from 'moment';
 import { log } from 'console';
+import { Request } from 'express';
+import { REQUEST } from '@nestjs/core';
 
 const CREATE_INVENTORY_OF_PRODUCT  = 'CreateInventoryOfProduct';
 
 
-@Injectable()
+@Injectable({ scope: Scope.REQUEST })
 export class ProductsService {
     constructor(
       @InjectModel(Product.name) private productModel: Model<Product>,
-      @Inject("INVENTORY_SERVICE") private rabbitClient: ClientProxy) {}
+      @Inject("INVENTORY_SERVICE") private rabbitClient: ClientProxy,
+      @Inject(REQUEST) private readonly request: Request) {}
 
     async create(createProductDto: CreateProductDto): Promise<Product> {
+      //const { ff } : any = this.request.decodedData;
       const LocalDateTime = new Date();
       const ban = 12345678
       const isInventoryManagementRequired = createProductDto.isInventoryManagementRequired;
