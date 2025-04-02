@@ -7,8 +7,6 @@ import { HydratedDocument, SchemaTypes, Types } from 'mongoose';
 export type ProductDocument = HydratedDocument<Product>;
 
 
-
-
 @Schema({ _id: false })
 export class ProductItem {
     @Prop()
@@ -43,6 +41,8 @@ export class Product {
     id?: Types.ObjectId
     @Prop()
     ban: number;
+    @Prop()
+    userId: string;
     @Prop()
     status: number;
     @Prop()

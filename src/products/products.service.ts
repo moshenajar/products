@@ -10,8 +10,11 @@ import * as moment from 'moment';
 import { log } from 'console';
 import { Request } from 'express';
 import { REQUEST } from '@nestjs/core';
+import { User } from 'src/guards/user.entity';
 
 const CREATE_INVENTORY_OF_PRODUCT  = 'CreateInventoryOfProduct';
+
+
 
 
 @Injectable({ scope: Scope.REQUEST })
@@ -22,13 +25,13 @@ export class ProductsService {
       @Inject(REQUEST) private readonly request: Request) {}
 
     async create(createProductDto: CreateProductDto): Promise<Product> {
-      //const { ff } : any = this.request.decodedData;
+      const userId = this.request.user.id;
       const LocalDateTime = new Date();
       const ban = 12345678
       const isInventoryManagementRequired = createProductDto.isInventoryManagementRequired;
       const product : ProductItem = { LocalDateTime,...createProductDto }
       let status:number = 1;
-      const productCreator: Product = { ban,status,product,isInventoryManagementRequired };
+      const productCreator: Product = { ban,userId,status,product,isInventoryManagementRequired };
       const createdProduct = new this.productModel(productCreator);
       await createdProduct.save();
 
@@ -55,12 +58,13 @@ export class ProductsService {
     
 
     updateProduct(productID: number, updateProductDto: UpdateProductDto){
+      const userId = this.request.user.id;
       const LocalDateTime = new Date();
       const ban:number = 12345678
       const isInventoryManagementRequired:boolean = false;
       const status:number = 1;
       const product : ProductItem = {productID, LocalDateTime,...updateProductDto };
-      const productCreator: Product = { ban,status,product,isInventoryManagementRequired };
+      const productCreator: Product = { ban,userId,status,product,isInventoryManagementRequired };
       const query: any = { 'product.productID' : productID }
         //new:true return pruduct after update
         return this.productModel.findOneAndUpdate(query, productCreator, { new:true });
