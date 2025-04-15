@@ -11,11 +11,18 @@ import { IsNumber } from 'class-validator';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { User } from 'src/guards/user.entity';
 import { GetUser } from 'src/guards/get-user.decorator';
+import { MessagePattern } from '@nestjs/microservices';
 
 @Controller('products')
 @UseInterceptors(LoggingInterceptor)
 export class ProductsController {
     constructor(private readonly productsService: ProductsService) {}
+
+
+    @MessagePattern('GetAllProducts')
+    async GetAllProducts():Promise<Product[]> {
+        return  this.productsService.findAll();
+    }
 
     @Get()
     async findAll():Promise<Product[]> {
